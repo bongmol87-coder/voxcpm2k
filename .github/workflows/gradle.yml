@@ -90,13 +90,8 @@ jobs:
         run: |
           ./gradlew assembleAndroidMain testAndroidHostTest :example-app:assembleDebug --configuration-cache
           ./gradlew assembleAndroidMain testAndroidHostTest :example-app:assembleDebug --configuration-cache
-      - name: Inspect Android AAR and example APK
-        run: |      - name: Upload debug APK
-        uses: actions/upload-artifact@v4
-        with:
-          name: voxcpm2-android-debug-apk
-          path: example-app/build/outputs/apk/**/*.apk
-          if-no-files-found: error
+      - name:       - name: Inspect Android AAR and example APK
+        run: |
           aar=$(find build/outputs -name '*.aar' -print -quit)
           test -n "$aar"
           for library in libvoxcpm2_ncnn.so libvoxcpm2_jni.so libc++_shared.so; do
@@ -108,6 +103,13 @@ jobs:
           for library in libvoxcpm2_ncnn.so libvoxcpm2_jni.so libc++_shared.so; do
             unzip -Z1 "$apk" | grep -qx "lib/arm64-v8a/$library"
           done
+
+      - name: Upload debug APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: voxcpm2-android-debug-apk
+          path: example-app/build/outputs/apk/**/*.apk
+          if-no-files-found: error
 
   apple:
     runs-on: macos-26
