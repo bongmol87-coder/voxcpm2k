@@ -86,8 +86,9 @@ jobs:
         run: |
               
         run: |
-          yes | sdkmanager --licenses
+          yes | yes | sdkmanager --licenses
           sdkmanager "platforms;android-36" "ndk;29.0.14206865"
+          
       - name: Build Android binding and example app
         run: |
           ./gradlew assembleAndroidMain testAndroidHostTest :example-app:assembleDebug --configuration-cache
